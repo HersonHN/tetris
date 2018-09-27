@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+
+<head> 
+<title>Tetris</title> 
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="style.css"/>
+<link rel="stylesheet" type="text/css" href="tetris.css"/>
+<script type="text/javascript" src="funciones.js"></script> 
+<script type="text/javascript" src="tetris.js"></script> 
+</head>
+
+<body onload="precargar()">
+<div class="todo" id="areahtml">
+
+
+
+<table class="exp" id="tablecomienzo">
+<tbody><tr><td><div id="divcomienzo">
+	<h2>Tetris</h2>
+	<p id="loading">Cargando...</p>
+	<input id="cmdcargar" type="submit" class="oculto" value="Jugar" onclick="cargar();"/>
+
+<table><tr><td class="o1"></td></tr></table>
+</div></td></tr></tbody></table>
+
+
+
+<table id="tablatodo" class="oculto"><tbody><tr>
+<td id="tdhold"></td>
+<td id="tdjuego"><div id="divjuego"></div></td>
+<td id="tdnext"></td>
+<td>
+
+<table class="datos">
+<tr class="trti"><th colspan="2">Teclas</th></tr>
+<tr class="trsi"><td>Mover a la izquierda</td><td>Flecha Izquierda</td></tr>
+<tr class="trno"><td>Mover a la derecha</td><td>Flecha Derecha</td></tr>
+<tr class="trsi"><td>Rotar</td><td>Flecha Arriba</td></tr>
+<tr class="trno"><td>Bajar Rapidamente</td><td>Flecha Abajo</td></tr>
+<tr class="trsi"><td>Guardar Pieza</td><td>Control</td></tr>
+<tr class="trno"><td>Pausar Juego</td><td>Escape</td></tr>
+</table>
+
+<div id="puntuaciones">
+<span>Lineas:</span>
+<input type="text" id="txtlineas" readonly="readonly" value=""/>
+<span>Puntos:</span>
+<input type="text" id="txtpuntos" readonly="readonly" value=""/>
+<span>Nivel:</span>
+<input type="text" id="txtnivel" readonly="readonly" value="1"/>
+</div>
+
+</td>
+</tr></tbody></table>
+</div>
+
+</body>
+</html> 
