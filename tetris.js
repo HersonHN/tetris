@@ -4,7 +4,7 @@ var timer = null;
 var nRows = 20;
 var nCols = 10;
 var Velocidad = 'normal';
-var aCuadros = new Array(0);
+var aCuadros = [];
 var piezaActiva = null;
 var sombraRow = null;
 
@@ -18,7 +18,7 @@ var teclas = {
 	ab: 40
 };
 
-var colaPiezas = new Array(3);
+var colaPiezas = ['', '', ''];
 var Hold = { tipo: '', nPos: 0, color: ''};
 
 var LINEAS = 0;
@@ -79,9 +79,9 @@ function cargar() {
 	var row;
 	var col;
 	for (row = 0; row < nRows; row++) {
-		aCuadros.push(new Array(nCols));
+		aCuadros.push([]);
 		for (col = 0; col < nCols; col++) {
-			aCuadros[row][col] = '';
+			aCuadros[row].push('');
 		}
 	}
 
@@ -179,7 +179,7 @@ function cargar() {
 
 
 function piezaAleatoria() {
-	var pieza = new Object();
+	var pieza = {};
 	var tipo = aleatorio(aTipos);
 	var canTipos = tetriminos[tipo].canTipos;
 	var nPos = Math.floor( canTipos * Math.random() );
@@ -194,7 +194,7 @@ function piezaAleatoria() {
 
 
 function nuevaPieza(tipo, nPos, color) {
-	var pieza = new Object();
+	var pieza = {};
 	pieza.tipo = tipo;
 	pieza.nPos = nPos;
 	pieza.width = tetriminos[tipo].posiciones[nPos].width;
@@ -202,15 +202,10 @@ function nuevaPieza(tipo, nPos, color) {
 	pieza.col = 4;
 	pieza.color = color;
 
-	pieza.mostrar = function(lMostrar) { mostrarPieza(
-			lMostrar,
-			piezaActiva.row, 
-			piezaActiva.col, 
-			piezaActiva.tipo,
-			piezaActiva.nPos, 
-			piezaActiva.color,
-			'', false) };
-	pieza.rotar = function() { rotarPieza() };
+	pieza.mostrar = function(lMostrar) {
+		mostrarPieza(lMostrar, pieza.row,  pieza.col,  pieza.tipo, pieza.nPos,  pieza.color, '', false);
+	};
+	pieza.rotar = function() { rotarPieza(pieza) };
 	pieza.mover = function(nCuadros) { moverPieza(nCuadros) };
 
 	if (!posicionValida(pieza.row, pieza.col, tipo, nPos)) {
@@ -223,7 +218,7 @@ function nuevaPieza(tipo, nPos, color) {
 	}
 
 	Velocidad = 'normal';
-	timer = setTimeout('bajar()', retraso[Velocidad][NIVEL]);
+	timer = setTimeout(bajar, retraso[Velocidad][NIVEL]);
 	return pieza;
 }
 
@@ -252,31 +247,30 @@ function mostrarPieza(lMostrar, row, col, tipo, nPos, color, cPrefijoTD, lSombra
 
 
 
-function rotarPieza(r, c) {
+function rotarPieza(pieza, r, c) {
+	var row  = (r == null) ? pieza.row : r;
+	var col  = (c == null) ? pieza.col : c;
 
-	var row  = (r == null) ? piezaActiva.row : r;
-	var col  = (c == null) ? piezaActiva.col : c;
-
-	var tipo = piezaActiva.tipo;
-	var nPos = piezaActiva.nPos + 1;
+	var tipo = pieza.tipo;
+	var nPos = pieza.nPos + 1;
 	if (nPos == tetriminos[tipo].canTipos) {
 		nPos = 0;
 	}
 
 	if(!posicionValida(row, col, tipo, nPos)) {
 
-		var width  = piezaActiva.width;
+		var width  = pieza.width;
 		var widthR = tetriminos[tipo].posiciones[nPos].width;
 		if(row < 0) {
-			rotarPieza(0, col);
+			rotarPieza(pieza, 0, col);
 			return true;
 		}
 		if(col < 0) {
-			rotarPieza(row, 0);
+			rotarPieza(pieza, row, 0);
 			return true;
 		}
 		if(col+widthR >= nCols) {
-			rotarPieza(row, nCols-1-widthR );
+			rotarPieza(pieza, row, nCols-1-widthR );
 			return true;
 		}
 
@@ -285,14 +279,14 @@ function rotarPieza(r, c) {
 
 
 	mostrarSombra(false);
-	piezaActiva.mostrar(false);
+	pieza.mostrar(false);
 
-	piezaActiva.row = row;
-	piezaActiva.col = col;
-	piezaActiva.nPos = nPos;
+	pieza.row = row;
+	pieza.col = col;
+	pieza.nPos = nPos;
 
 	mostrarSombra(true);
-	piezaActiva.mostrar(true);
+	pieza.mostrar(true);
 
 	return true;
 }
@@ -332,7 +326,8 @@ function bajar() {
 	piezaActiva.mostrar(false);
 	piezaActiva.row = row + 1;
 	piezaActiva.mostrar(true);
-	timer = setTimeout('bajar()', retraso[Velocidad][NIVEL]);
+
+	timer = setTimeout(bajar, retraso[Velocidad][NIVEL]);
 }
 
 
@@ -340,7 +335,7 @@ function bajar() {
 function bajarRapido() {
 	clearInterval(timer);
 	Velocidad = 'rapido';
-	timer = setTimeout('bajar()', retraso[Velocidad][NIVEL]);
+	timer = setTimeout(bajar, retraso[Velocidad][NIVEL]);
 }
 
 
